@@ -1,0 +1,33 @@
+# =========================================================
+# Deepfake / AI-Generated Image Detection — Configuration
+# =========================================================
+
+data:
+  root_dir: "data/raw"        # expects data/raw/real/*.jpg and data/raw/fake/*.jpg
+  image_size: 224
+  val_split: 0.15
+  test_split: 0.15
+  num_workers: 2
+  seed: 42
+
+model:
+  backbone: "efficientnet_b0"   # efficientnet_b0 | resnet50
+  pretrained: true
+  freeze_early_layers: true
+  freq_branch_out_dim: 128
+  num_classes: 2
+
+train:
+  epochs: 25
+  batch_size: 32
+  lr: 0.0003
+  weight_decay: 0.00001
+  early_stopping_patience: 5
+  scheduler_patience: 2
+  mixed_precision: true
+  checkpoint_dir: "checkpoints"
+  log_file: "outputs/train_log.csv"
+
+inference:
+  default_checkpoint: "checkpoints/best_model.pt"
+  gradcam_target_layer: "backbone_features.7"
